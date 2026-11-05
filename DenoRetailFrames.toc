@@ -1,8 +1,10 @@
 ## Interface: 16001
 ## Title: Deno Retail Frames
-## Notes: Puts the retail layout back on the game's own player and target frames: level number top right, name on the left, full-height health bar.
+## Notes: Puts the retail layout back on the game's own player and target frames: level number top right, name on the left, full-height health bar. Option: the XP bar text shown all the time.
 ## Author: Deniz
-## Version: 0.8.0
+## Version: 0.9.0
 ## Category: Unit Frames
+## SavedVariables: DenoRetailFramesDB
 
 Core.lua
+Options.lua

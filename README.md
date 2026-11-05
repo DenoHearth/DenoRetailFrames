@@ -18,6 +18,8 @@ differently. This addon puts the retail layout back on the game's own frames:
 - **Retail bar art:** the bars fill edge to edge, without the gaps Forever's own fill art has.
 - **White absorb shields:** the game already shows incoming heals and shields on these
   frames; the shield is now white instead of blue.
+- **XP bar text:** the experience bar shows its numbers all the time (option "Always Show XP Bar
+  Text", on by default; game Options, AddOns, Deno Retail Frames, or /drf).
 
 Blizzard's own frames stay in place, so clicks, menus and Edit Mode work as before. Nothing
 is moved during combat.

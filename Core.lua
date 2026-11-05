@@ -27,6 +27,7 @@ local function OutOfCombat(fn)
 		fn()
 	end
 end
+ns.OutOfCombat = OutOfCombat   -- Options.lua writes the XP bar text setting through it
 
 ------------------------------------------------------------------------------------------
 -- Player frame
