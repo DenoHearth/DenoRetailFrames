@@ -24,5 +24,10 @@ loader:SetScript("OnEvent", function()
 			end
 			Full(frame)
 		end
+		-- power bar on every party/raid member, not only healers (his ask, 2026-11-07: his own
+		-- warlock bar was missing). The CVar callback in Blizzard_CUFProfiles applies it to the frames.
+		if not InCombatLockdown() and C_CVar.GetCVar("raidFramesDisplayOnlyHealerPowerBars") == "1" then
+			C_CVar.SetCVar("raidFramesDisplayOnlyHealerPowerBars", "0")
+		end
 	end)
 end)

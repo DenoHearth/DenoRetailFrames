@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.1 — 2026-11-07
+
+- Party and raid frames are drawn at full strength again. An imported Edit Mode layout set their opacity to about half, so members in range looked faded too; the game's own fade for members out of range stays
+- Every party and raid member now gets a power bar, not only healers: the game's "Display Only Healer Power Bars" setting is switched off at login
+
 ## v0.9.0 — 2026-11-05
 
 - New: "Always Show XP Bar Text", on by default. The experience bar shows its numbers all the time, not only under the mouse. It is the game's own setting (xpBarText), which Forever's Options have no checkbox for; switching the option off puts the game's setting back as it was
