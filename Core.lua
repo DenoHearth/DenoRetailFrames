@@ -101,9 +101,32 @@ local function PlayerBars()
 	end
 end
 
+-- The rest glow (gold), the combat glow (red, both StatusTexture) and the aggro flash (FrameFlash) wear the
+-- target's InCombat art mirrored (ART below). On the target frame that art sits at CENTER 0,2 of the frame
+-- art (TargetFrame.xml, Mainline); Camelot puts the player's at CENTER 0,0 and TOPLEFT 17,-14, places
+-- made for its own art, so the glows stood out left of the ring (his report, 2026-11-08: "doesn't fit").
+-- Blizzard re-anchors them each time the frame art changes, so this runs after it.
+local function PlayerGlows()
+	local container = PlayerFrame.PlayerFrameContainer
+	local main = PlayerMain()
+	local flash, status, art = container and container.FrameFlash, main and main.StatusTexture, container and container.FrameTexture
+	if not (flash and status and art) then return end
+	flash:ClearAllPoints()
+	status:ClearAllPoints()
+	if art:IsShown() and not InVehicle() then
+		flash:SetPoint("CENTER", art, "CENTER", 0, 2)
+		status:SetPoint("CENTER", art, "CENTER", 0, 2)
+	else
+		-- vehicle or class resource art: Camelot's own places (Camelot/PlayerFrame.lua)
+		flash:SetPoint("CENTER", container, "CENTER", 0, 0)
+		status:SetPoint("TOPLEFT", container, "TOPLEFT", 17, -14)
+	end
+end
+
 local function PlayerLayout()
 	OutOfCombat(PlayerText)
 	OutOfCombat(PlayerBars)
+	OutOfCombat(PlayerGlows)
 end
 
 -- Forever colours the level white; retail colours it gold (green while scaled).
@@ -218,6 +241,12 @@ local ART = {
 	["ui-hud-unitframe-targetoftarget-portraiton"] = { 1113, 1353, 315, 413 },
 	["ui-hud-unitframe-targetoftarget-portraiton-incombat"] = { 1597, 1825, 315, 409 },
 	["ui-hud-unitframe-targetoftarget-portraiton-status"] = { 1355, 1595, 315, 413 },
+	-- Incoming heals, absorbs and the mana a cast will cost: the bar segments' fill (his report, 2026-11-08:
+	-- a heal showed "a narrow bar" that did not fit). Forever's c60 fill has the same empty margin as its
+	-- bar fills; retail's fills the slot. These are plain textures, so part of the sheet works here.
+	["ui-hud-unitframe-player-portraiton-bar-health-status"] = { 387, 635, 461, 501, segment = true },
+	["ui-hud-unitframe-player-portraiton-bar-mana-status"] = { 887, 1135, 547, 567, segment = true },
+	["ui-hud-unitframe-target-portraiton-bar-health-status"] = { 1143, 1395, 415, 455, segment = true },
 }
 -- the masks that cut the bars and the portrait to shape are whole files of their own (2x)
 local MASKS = {
@@ -269,6 +298,11 @@ local function Retail(region, atlas)
 	if c.hide then
 		region:SetAlpha(0)
 		return
+	end
+	-- a status bar's own fill cannot keep a part of a sheet (Mana-Status is also a fill for some power bars)
+	if c.segment then
+		local owner = region:GetParent()
+		if owner and owner:IsObjectType("StatusBar") then return end
 	end
 	region:SetTexture(SHEET)
 	if c.mirror then
@@ -338,6 +372,10 @@ loader:SetScript("OnEvent", function()
 	if PlayerFrame and PlayerFrame_GetHealthBarContainer then
 		hooksecurefunc("PlayerFrame_ToPlayerArt", PlayerLayout)
 		hooksecurefunc("PlayerFrame_UpdateLevel", PlayerLevelColor)
+		-- also runs on vehicle art, where PlayerFrame_ToPlayerArt does not
+		if PlayerFrame_UpdateStatusTextureVisuals then
+			hooksecurefunc("PlayerFrame_UpdateStatusTextureVisuals", function() OutOfCombat(PlayerGlows) end)
+		end
 		PlayerLayout()
 		PlayerLevelColor()
 	end

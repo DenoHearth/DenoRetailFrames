@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.2 — 2026-11-08
+
+- The gold glow while resting, the red glow in combat and the red aggro flash now sit exactly on the round player frame; they were drawn a few pixels to the left and too low
+- Incoming heals, absorb shields and the mana a cast will cost now fill the full height of the bar on the player and target frames, instead of a thin strip
+
 ## v0.10.1 — 2026-11-07
 
 - Party and raid frames are drawn at full strength again. An imported Edit Mode layout set their opacity to about half, so members in range looked faded too; the game's own fade for members out of range stays
