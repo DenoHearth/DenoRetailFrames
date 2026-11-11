@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.10.3 — 2026-11-11
+
+- Target and focus frames: the level number is back in the small circle at the bottom right of the portrait, for friendly and enemy targets alike; the circle was empty
+- The skull for targets too high to tell now sits in that circle as well, instead of over the start of the name
+- The name uses the space the level number left free, so longer names fit
+
 ## v0.10.2 — 2026-11-08
 
 - The gold glow while resting, the red glow in combat and the red aggro flash now sit exactly on the round player frame; they were drawn a few pixels to the left and too low

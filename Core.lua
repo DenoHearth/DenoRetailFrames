@@ -149,21 +149,25 @@ local function TargetText(frame)
 
 	rep:ClearAllPoints()
 	rep:SetPoint("TOPRIGHT", main, "TOPRIGHT", -75, -25)
+	-- the level sits in Forever's circle (below), so the name takes the whole strip
 	name:SetJustifyH("LEFT")
-	name:SetWidth(90)
+	name:SetWidth(112)
 	name:ClearAllPoints()
-	name:SetPoint("TOPLEFT", rep, "TOPRIGHT", -106, -1)
+	name:SetPoint("TOPLEFT", rep, "TOPRIGHT", -128, -1)
 
-	if main.LevelBackgroundCircle then main.LevelBackgroundCircle:Hide() end
-	level:SetFontObject(GameNormalNumberFont)
-	level:SetJustifyH("CENTER")
-	level:ClearAllPoints()
-	level:SetPoint("TOPLEFT", rep, "TOPRIGHT", -133, -2)
+	-- Level and skull stay in Forever's small circle at the bottom right, centred as
+	-- Blizzard_UnitFrame/Camelot/TargetFrame.lua does (his ask 2026-11-11: the circle was empty).
+	local circle = main.LevelBackgroundCircle
+	if circle then
+		level:ClearAllPoints()
+		level:SetJustifyH("CENTER")
+		level:SetPoint("CENTER", circle, "CENTER", 0, -0.5)
+	end
 
 	local contextual = frame.TargetFrameContent.TargetFrameContentContextual
-	if contextual and contextual.HighLevelTexture then
+	if circle and contextual and contextual.HighLevelTexture then
 		contextual.HighLevelTexture:ClearAllPoints()
-		contextual.HighLevelTexture:SetPoint("TOPLEFT", level, "TOPLEFT", 4, 2)
+		contextual.HighLevelTexture:SetPoint("CENTER", circle, "CENTER", 0, 0)
 	end
 
 	local mana = main.ManaBar

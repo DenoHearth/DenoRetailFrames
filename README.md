@@ -13,8 +13,9 @@ differently. This addon puts the retail layout back on the game's own frames:
 
 - **Player frame:** name on the left, level number top right in gold, a full-height health
   bar and the round portrait ring of the target frame, mirrored.
-- **Target and focus frames:** retail name, level and reputation strip positions, with the
-  strip behind a player's name in their class colour.
+- **Target and focus frames:** retail name and reputation strip positions, with the
+  strip behind a player's name in their class colour. The level number (or the skull) stays
+  in the game's small circle at the bottom right of the portrait.
 - **Retail bar art:** the bars fill edge to edge, without the gaps Forever's own fill art has.
 - **White absorb shields:** the game already shows incoming heals and shields on these
   frames; the shield is now white instead of blue.
