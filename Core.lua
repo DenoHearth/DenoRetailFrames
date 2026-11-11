@@ -216,6 +216,21 @@ end
 local function HookTarget(frame)
 	if not frame or not frame.UpdateHealthBarVisuals then return end
 	if frame.CheckFaction then hooksecurefunc(frame, "CheckFaction", ClassStrip) end
+	-- The skull is only for a level too high to tell (or a corpse): the level number takes its
+	-- place otherwise. In his client both were drawn together in the circle (his picture,
+	-- 2026-11-11: "60" over a skull), so the skull follows the level text's own shown state.
+	local content = frame.TargetFrameContent
+	local level = content and content.TargetFrameContentMain and content.TargetFrameContentMain.LevelText
+	local skull = content and content.TargetFrameContentContextual and content.TargetFrameContentContextual.HighLevelTexture
+	if level and skull then
+		local function OneOfTwo()
+			if level:IsShown() and skull:IsShown() then skull:Hide() end
+		end
+		if frame.CheckLevel then hooksecurefunc(frame, "CheckLevel", OneOfTwo) end
+		hooksecurefunc(skull, "Show", OneOfTwo)
+		hooksecurefunc(level, "Show", OneOfTwo)
+		OneOfTwo()
+	end
 	OutOfCombat(function() TargetText(frame) end)
 	hooksecurefunc(frame, "UpdateHealthBarVisuals", function(self, classification)
 		OutOfCombat(function() TargetBars(self, classification) end)

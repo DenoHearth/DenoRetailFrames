@@ -2,7 +2,7 @@
 ## Title: Deno Retail Frames
 ## Notes: Puts the retail layout back on the game's own player and target frames: level number top right, name on the left, full-height health bar. Option: the XP bar text shown all the time.
 ## Author: Deniz
-## Version: 0.10.3
+## Version: 0.10.4
 ## Category: Unit Frames
 ## SavedVariables: DenoRetailFramesDB
 
