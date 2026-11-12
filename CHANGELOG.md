@@ -3,6 +3,10 @@
 ## v0.10.5 — 2026-11-12
 - Target/focus frame: the Horde/Alliance PvP badge now sits left of the level circle instead of on its rim, where it covered the level number.
 
+## v0.10.4 — 2026-11-11
+
+- Target and focus frames: the circle shows either the level number or the skull, never both on top of each other
+
 ## v0.10.3 — 2026-11-11
 
 - Target and focus frames: the level number is back in the small circle at the bottom right of the portrait, for friendly and enemy targets alike; the circle was empty
