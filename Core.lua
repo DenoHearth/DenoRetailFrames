@@ -170,6 +170,15 @@ local function TargetText(frame)
 		contextual.HighLevelTexture:SetPoint("CENTER", circle, "CENTER", 0, 0)
 	end
 
+	-- The faction PvP badge (Horde/Alliance small circle, scale 0.8): Forever anchors it TOP to the
+	-- frame's TOPRIGHT -24,-65, which lands on the level circle's top right rim, so it covered the
+	-- level number (his picture 2026-11-12, "17" with the red Horde badge on it). Beside the circle
+	-- instead, in the gap between the mana bar end and the circle.
+	if circle and contextual and contextual.PvpBackgroundIcon then
+		contextual.PvpBackgroundIcon:ClearAllPoints()
+		contextual.PvpBackgroundIcon:SetPoint("RIGHT", circle, "LEFT", -1, 0)
+	end
+
 	local mana = main.ManaBar
 	mana:SetWidth(134)
 	mana:ClearAllPoints()
