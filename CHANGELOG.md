@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.10.6 — 2026-11-18
+- Rare and rare-elite targets: the silver frame and the silver dragon round the portrait now use the retail art at retail's spot; Forever's square box and wings did not fit the retail layout (thanks Zautix). Elite and boss dragons use the retail art too.
+
 ## v0.10.5 — 2026-11-12
 - Target/focus frame: the Horde/Alliance PvP badge now sits left of the level circle instead of on its rim, where it covered the level number.
 

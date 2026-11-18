@@ -225,6 +225,9 @@ end
 local function HookTarget(frame)
 	if not frame or not frame.UpdateHealthBarVisuals then return end
 	if frame.CheckFaction then hooksecurefunc(frame, "CheckFaction", ClassStrip) end
+	if frame.CheckClassification then
+		hooksecurefunc(frame, "CheckClassification", function(self) ns.DragonSpot(self) end)
+	end
 	-- The skull is only for a level too high to tell (or a corpse): the level number takes its
 	-- place otherwise. In his client both were drawn together in the circle (his picture,
 	-- 2026-11-11: "60" over a skull), so the skull follows the level text's own shown state.
@@ -275,6 +278,16 @@ local ART = {
 	["ui-hud-unitframe-player-portraiton-bar-health-status"] = { 387, 635, 461, 501, segment = true },
 	["ui-hud-unitframe-player-portraiton-bar-mana-status"] = { 887, 1135, 547, 567, segment = true },
 	["ui-hud-unitframe-target-portraiton-bar-health-status"] = { 1143, 1395, 415, 455, segment = true },
+	-- Rares and elites (Zautix on CurseForge, 2026-11-17: "Silver-dragon rare elite frames are broken").
+	-- A rare's frame is its own atlas, and the dragon round the portrait is a second texture
+	-- (BossPortraitFrameTexture). Both were left on Forever's c60 art, whose square box and wings do
+	-- not fit the retail layout. Retail art from UiTextureAtlasMember (build 70450); the dragons sit on
+	-- file 4703662 (512x512) at retail's own spots (Mainline TargetFrameUtils), not Camelot's.
+	["ui-hud-unitframe-target-rare-portraiton"] = { 1, 385, 587, 721, w = 192, h = 67 },
+	["ui-hud-unitframe-target-portraiton-boss-rare-silver-winged"] = { 1, 161, 325, 483, file = 4703662, fw = 512, fh = 512, w = 80, h = 79, x = -11, y = -8 },
+	["ui-hud-unitframe-target-portraiton-boss-rare-silver"] = { 1, 161, 325, 483, file = 4703662, fw = 512, fh = 512, w = 80, h = 79, x = -11, y = -8 },
+	["ui-hud-unitframe-target-portraiton-boss-gold-winged"] = { 1, 199, 1, 163, file = 4703662, fw = 512, fh = 512, w = 99, h = 81, x = 8, y = -8 },
+	["ui-hud-unitframe-target-portraiton-boss-gold"] = { 1, 161, 165, 323, file = 4703662, fw = 512, fh = 512, w = 80, h = 79, x = -11, y = -8 },
 }
 -- the masks that cut the bars and the portrait to shape are whole files of their own (2x)
 local MASKS = {
@@ -332,14 +345,28 @@ local function Retail(region, atlas)
 		local owner = region:GetParent()
 		if owner and owner:IsObjectType("StatusBar") then return end
 	end
-	region:SetTexture(SHEET)
+	local fw, fh = c.fw or SW, c.fh or SH
+	region:SetTexture(c.file or SHEET)
 	if c.mirror then
-		region:SetTexCoord(c[2] / SW, c[1] / SW, c[3] / SH, c[4] / SH)
+		region:SetTexCoord(c[2] / fw, c[1] / fw, c[3] / fh, c[4] / fh)
 	else
-		region:SetTexCoord(c[1] / SW, c[2] / SW, c[3] / SH, c[4] / SH)
+		region:SetTexCoord(c[1] / fw, c[2] / fw, c[3] / fh, c[4] / fh)
 	end
 	if c.w then region:SetSize(c.w, c.h) end
+	-- Blizzard anchors the dragon after setting its art; CheckClassification's hook moves it here
+	region.drfSpot = c.x and c or nil
 end
+
+-- the dragon round a rare's, elite's or boss's portrait, at retail's spot (see ART)
+local function DragonSpot(frame)
+	local container = frame.TargetFrameContainer
+	local dragon = container and container.BossPortraitFrameTexture
+	local spot = dragon and dragon.drfSpot
+	if not spot then return end
+	dragon:ClearAllPoints()
+	dragon:SetPoint("TOPRIGHT", container, "TOPRIGHT", spot.x, spot.y)
+end
+ns.DragonSpot = DragonSpot
 
 local hooked = {}
 local function Watch(region)
