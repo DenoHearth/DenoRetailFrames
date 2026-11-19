@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.10.7 — 2026-11-19
+- Target/focus frame: mobs ten or more levels above you now show their real level in the circle (as the nameplate does) instead of the previous target's level drawn over a skull. The skull is kept for corpses and levels the game hides.
+
 ## v0.10.6 — 2026-11-18
 - Rare and rare-elite targets: the silver frame and the silver dragon round the portrait now use the retail art at retail's spot; Forever's square box and wings did not fit the retail layout (thanks Zautix). Elite and boss dragons use the retail art too.
 

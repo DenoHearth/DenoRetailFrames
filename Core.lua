@@ -234,14 +234,40 @@ local function HookTarget(frame)
 	local content = frame.TargetFrameContent
 	local level = content and content.TargetFrameContentMain and content.TargetFrameContentMain.LevelText
 	local skull = content and content.TargetFrameContentContextual and content.TargetFrameContentContextual.HighLevelTexture
+	-- 0.10.7 (his picture 2026-11-19: level 46 mob, target circle showed "27" over the skull while
+	-- the nameplate said 46): CheckLevel uses UnitEffectiveLevel, which is -1 for a mob ten or more
+	-- levels above, so it hid the text and showed the skull; then Camelot's CheckBattlePet calls
+	-- LevelText:SetShown(true) (Camelot/TargetFrame.lua), bringing back the previous target's text.
+	-- Now the real level from UnitLevel (as the nameplate reads it) is written in the circle, the
+	-- skull only for a corpse or a level the game will not tell at all.
 	if level and skull then
-		local function OneOfTwo()
-			if level:IsShown() and skull:IsShown() then skull:Hide() end
+		local function FixLevel(self)
+			local unit = self.unit
+			if not unit or not UnitExists(unit) then return end
+			if UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) then
+				skull:Hide()
+				return
+			end
+			local lvl = UnitLevel(unit)
+			if not canaccessvalue(lvl) then lvl = nil end
+			if UnitIsCorpse(unit) or not lvl or lvl <= 0 then
+				level:Hide()
+				skull:Show()
+				return
+			end
+			level:SetText(lvl)
+			if UnitCanAttack("player", unit) then
+				local color = GetDifficultyColor(C_PlayerInfo.GetContentDifficultyCreatureForPlayer(unit))
+				level:SetVertexColor(color.r, color.g, color.b)
+			else
+				level:SetVertexColor(1.0, 0.82, 0.0)
+			end
+			level:Show()
+			skull:Hide()
 		end
-		if frame.CheckLevel then hooksecurefunc(frame, "CheckLevel", OneOfTwo) end
-		hooksecurefunc(skull, "Show", OneOfTwo)
-		hooksecurefunc(level, "Show", OneOfTwo)
-		OneOfTwo()
+		if frame.CheckLevel then hooksecurefunc(frame, "CheckLevel", FixLevel) end
+		if frame.CheckBattlePet then hooksecurefunc(frame, "CheckBattlePet", FixLevel) end
+		FixLevel(frame)
 	end
 	OutOfCombat(function() TargetText(frame) end)
 	hooksecurefunc(frame, "UpdateHealthBarVisuals", function(self, classification)
